@@ -41,12 +41,14 @@ jobs:
 
       # 7. Deploy
       - name: Deploy to Server
-        uses: appleboy/ssh-action@v0.1.6
-        with:
-          host: ${{ secrets.SERVER_IP }}
-          username: ubuntu
-          key: ${{ secrets.SSH_KEY }}
-          script: |
-            cd /var/www/devops-project
-            git pull
-            bash scripts/deploy.sh
+  uses: appleboy/ssh-action@v0.1.6
+  with:
+    host: ${{ secrets.SERVER_IP }}
+    username: ubuntu
+    key: ${{ secrets.SSH_KEY }}
+    port: 22
+    script: |
+      echo "Connected successfully"
+      cd /var/www/devops-project
+      git pull origin main
+      bash scripts/deploy.sh
