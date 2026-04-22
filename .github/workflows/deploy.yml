@@ -1,46 +1,4 @@
-name: Full CI/CD Pipeline
-
-on:
-  push:
-    branches:
-      - main
-
-jobs:
-  pipeline:
-    runs-on: ubuntu-latest
-
-    steps:
-      # 1. Checkout code
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
-      # 2. Setup Node
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-
-      # 3. Install dependencies
-      - name: Install Dependencies
-        run: npm install
-        working-directory: backend
-
-      # 4. Test stage
-      - name: Run Tests
-        run: echo "No tests yet"
-        working-directory: backend
-
-      # 5. Security scan
-      - name: Security Scan
-        run: npm audit
-        working-directory: backend
-
-      # 6. Build Docker image
-      - name: Build Docker
-        run: docker build -t devops-app ./backend
-
-      # 7. Deploy
-      - name: Deploy to Server
+- name: Deploy to Server
   uses: appleboy/ssh-action@v0.1.6
   with:
     host: ${{ secrets.SERVER_IP }}
@@ -48,7 +6,8 @@ jobs:
     key: ${{ secrets.SSH_KEY }}
     port: 22
     script: |
-      echo "Connected successfully"
+      echo "Connected"
+      whoami
       cd /var/www/devops-project
       git pull origin main
       bash scripts/deploy.sh
